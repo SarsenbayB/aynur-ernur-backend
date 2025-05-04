@@ -147,7 +147,7 @@ app.post('/images/add', checkAuth, ImageController.createImage);
 app.get('/images', ImageController.getAllImage);
 app.delete('/images/:id', checkAuth, ImageController.removeImage);
 
-app.use((err, req, res, next) => {
+app.use((err, res,) => {
   console.error(err.stack);
   res.status(500).json({ message: 'Что-то пошло не так', error: err.message });
 });

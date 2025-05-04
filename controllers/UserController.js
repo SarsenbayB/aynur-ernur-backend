@@ -36,7 +36,7 @@ export const register = async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hash = await bcrypt.hash(password, salt);
 
-    // Генерация токена подтверждения
+
     const confirmationToken = jwt.sign({ email }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
 
@@ -50,7 +50,6 @@ export const register = async (req, res) => {
 
     await user.save();
 
-    // Отправка письма для подтверждения
     await transporter.sendMail({
       from: process.env.EMAIL_USER,
       to: email,
@@ -66,7 +65,7 @@ export const register = async (req, res) => {
 };
 
 
-// Подтверждение email
+
 export const confirmEmail = async (req, res) => {
   try {
     const { token } = req.params;
@@ -83,6 +82,7 @@ export const confirmEmail = async (req, res) => {
 
     res.json({ message: 'Email подтверждён.' });
   } catch (err) {
+    console.error(err);
     res.status(500).json({ message: 'Ошибка подтверждения.' });
   }
 };
@@ -116,7 +116,7 @@ export const login = async (req, res) => {
       },
     );
 
-    const { passwordHash, ...userData } = user._doc;
+    const { ...userData } = user._doc;
 
     res.json({
       ...userData,
@@ -152,6 +152,7 @@ export const forgotPassword = async (req, res) => {
 
     res.json({ message: 'Ссылка для сброса пароля отправлена.' });
   } catch (err) {
+    console.error(err);
     res.status(500).json({ message: 'Ошибка при сбросе пароля.' });
   }
 };
@@ -176,6 +177,7 @@ export const resetPassword = async (req, res) => {
 
     res.json({ message: 'Пароль обновлён.' });
   } catch (err) {
+    console.error(err);
     res.status(500).json({ message: 'Ошибка обновления пароля.' });
   }
 };
@@ -190,7 +192,7 @@ export const getMe = async (req, res) => {
       });
     }
 
-    const { passwordHash, ...userData } = user._doc;
+    const { ...userData } = user._doc;
 
     res.json(userData);
   } catch (err) {
