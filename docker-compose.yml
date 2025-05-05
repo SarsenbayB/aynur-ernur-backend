@@ -1,0 +1,46 @@
+services:
+  mongodb:
+    container_name: aynur-ernur-db
+    image: mongo:latest
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${DB_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${DB_PASSWORD}
+      MONGO_INITDB_DATABASE: ${DB_NAME}
+    networks:
+      - backend
+  server:
+    build: .
+    container_name: express-aynur-server
+    restart: always
+    ports:
+      - "9999:9999"
+    depends_on:
+      - mongodb
+      - client
+    environment:
+      - PORT=${PORT}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+      - JWT_SECRET=${JWT_SECRET}
+      - RESET_SECRET=${RESET_SECRET}
+      - EMAIL_USER=${EMAIL_USER}
+      - EMAIL_PASS=${EMAIL_PASS}
+      - FRONTEND_URL=${FRONTEND_URL}
+      - MONGO_URI=mongodb://${DB_USER}:${DB_PASSWORD}@mongodb/${DB_NAME}?retryWrites=true&w=majority`
+    networks:
+      - backend
+    # Сервис React-Vite
+  client:
+    build:
+      context: ../client
+      dockerfile: Dockerfile
+    container_name: aynur-client
+    restart: always
+    ports:
+      - "80:80"
+networks:
+  backend:
