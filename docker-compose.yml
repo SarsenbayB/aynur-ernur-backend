@@ -42,5 +42,7 @@ services:
     restart: always
     ports:
       - "80:80"
+    networks:
+      - backend
 networks:
   backend:
