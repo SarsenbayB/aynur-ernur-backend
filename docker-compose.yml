@@ -36,7 +36,7 @@ services:
     # Сервис React-Vite
   client:
     build:
-      context: ../client
+      context: ../aynur-ernur-client
       dockerfile: Dockerfile
     container_name: aynur-client
     restart: always
