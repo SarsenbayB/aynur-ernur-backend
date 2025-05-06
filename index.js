@@ -111,41 +111,41 @@ app.post('/upload/file', uploadFile.single('file'), (req, res) => {
   });
 });
 
-app.get('/tags', PostController.getLastTags);
+app.get('/api/tags', PostController.getLastTags);
 
-app.get('/posts', PostController.getAll);
-app.get('/posts/tags', PostController.getLastTags);
-app.get('/posts/:id', PostController.getOne);
-app.post('/posts', checkAuth, postCreateValidation, PostController.create);
-app.delete('/posts/:id', checkAuth, PostController.remove);
+app.get('/api/posts', PostController.getAll);
+app.get('/api/posts/tags', PostController.getLastTags);
+app.get('/api/posts/:id', PostController.getOne);
+app.post('/api/posts', checkAuth, postCreateValidation, PostController.create);
+app.delete('/api/posts/:id', checkAuth, PostController.remove);
 app.patch(
-  '/posts/:id',
+  '/api/posts/:id',
   checkAuth,
   postCreateValidation,
   handleValidationErrors,
   PostController.update,
 );
 
-app.get('/files', FileController.getAllFiles);
-app.get('/files/:id', FileController.getOneFile);
-app.post('/files', checkAuth, fileCreateValidation, handleValidationErrors, FileController.createFile);
-app.delete('/files/:id', checkAuth, FileController.removeFile);
-app.put("/files/block/:id", checkAuth, FileController.blockFile);
-app.put("/files/unBlock/:id", checkAuth, FileController.unBlockFile);
-app.patch('/files/:id', checkAuth, fileCreateValidation, handleValidationErrors, FileController.updateFile);
+app.get('/api/files', FileController.getAllFiles);
+app.get('/api/files/:id', FileController.getOneFile);
+app.post('/api/files', checkAuth, fileCreateValidation, handleValidationErrors, FileController.createFile);
+app.delete('/api/files/:id', checkAuth, FileController.removeFile);
+app.put("/api/files/block/:id", checkAuth, FileController.blockFile);
+app.put("/api/files/unBlock/:id", checkAuth, FileController.unBlockFile);
+app.patch('/api/files/:id', checkAuth, fileCreateValidation, handleValidationErrors, FileController.updateFile);
 app.get('/api/download/:filename', FileController.download);
 
 
-app.post('/team/add', checkAuth, TeamController.createTeam);
-app.get('/team', TeamController.getTeamAll);
-app.delete('/team/:id', checkAuth, TeamController.removeTeam);
-app.get('/team/:id', TeamController.getOneTeam);
-app.patch('/team/:id', checkAuth, TeamController.update);
+app.post('/api/team/add', checkAuth, TeamController.createTeam);
+app.get('/api/team', TeamController.getTeamAll);
+app.delete('/api/team/:id', checkAuth, TeamController.removeTeam);
+app.get('/api/team/:id', TeamController.getOneTeam);
+app.patch('/api/team/:id', checkAuth, TeamController.update);
 
 
-app.post('/images/add', checkAuth, ImageController.createImage);
-app.get('/images', ImageController.getAllImage);
-app.delete('/images/:id', checkAuth, ImageController.removeImage);
+app.post('/api/images/add', checkAuth, ImageController.createImage);
+app.get('/api/images', ImageController.getAllImage);
+app.delete('/api/images/:id', checkAuth, ImageController.removeImage);
 
 app.use((err, res,) => {
   console.error(err.stack);
