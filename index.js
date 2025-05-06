@@ -100,13 +100,13 @@ app.post('/auth/reset-password/:token', UserController.resetPassword);
 app.get('/auth/me', checkAuth, UserController.getMe);
 
 app.post('/api/upload/image', uploadImage.single('image'), (req, res) => {
-  res.json({ url: `/uploads/images/${req.file.originalname}` });
+  res.json({ url: `api/uploads/images/${req.file.originalname}` });
 });
 
 app.post('/api/upload/file', uploadFile.single('file'), (req, res) => {
   const fileName = encodeURIComponent(req.file.filename);
   res.json({
-    url: `http://localhost:9999/uploads/files/${fileName}`,
+    url: `api/uploads/files/${fileName}`,
     originalName: req.file.filename
   });
 });
