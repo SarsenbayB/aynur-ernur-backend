@@ -100,7 +100,7 @@ app.post('/auth/reset-password/:token', UserController.resetPassword);
 app.get('/auth/me', checkAuth, UserController.getMe);
 
 app.post('/api/upload/image', uploadImage.single('image'), (req, res) => {
-  res.json({ url: `/api/uploads/images/${req.file.originalname}` });
+  res.json({ url: `/uploads/images/${req.file.originalname}` });
 });
 
 app.post('/api/upload/file', uploadFile.single('file'), (req, res) => {
