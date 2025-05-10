@@ -16,8 +16,15 @@ COPY . .
 EXPOSE 9999
 
 # Создаем директории для загрузки файлов
-RUN mkdir -p /app/uploads/files
-RUN mkdir -p /app/uploads/images
+RUN ls -la /app && \
+    # If uploads exists, show what it is
+    (if [ -e /app/uploads ]; then ls -la /app/uploads; stat /app/uploads; fi) && \
+    # Try to remove it if it's a file and create directories
+    (if [ -f /app/uploads ]; then rm /app/uploads; fi) && \
+    mkdir -p /app/uploads/files
+
+# Set proper permissions
+RUN chown -R node:node /app/uploads
 
 # Запускаем приложение
 CMD ["npm", "start"]
