@@ -131,19 +131,26 @@ const __dirname = path.dirname(__filename);
 export const download = async (req, res) => {
     try {
         const filename = decodeURIComponent(req.params.filename);
-        const filePath = path.join(__dirname, '../uploads/files', filename);
+
+        // Use relative path with __dirname
+        const filePath = path.join(__dirname, '..', 'uploads', 'files', filename);
+
+        console.log('Attempting to access file at:', filePath); // Add debugging
 
         // Set download headers
         res.setHeader('Content-Disposition', `attachment; filename*=UTF-8''${encodeURIComponent(filename)}`);
+
         // Check if file exists using promises API
         try {
             await fsPromises.access(filePath);
         } catch (error) {
+            console.error(`File access error: ${error.message} for path: ${filePath}`);
             return res.status(404).json({
                 message: 'Файл табылмады',
                 error: error.message
             });
         }
+
         // Create read stream using standard fs
         const fileStream = fs.createReadStream(filePath);
 

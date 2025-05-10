@@ -54,11 +54,11 @@ const app = express();
 
 const imageStorage = multer.diskStorage({
   destination: (_, __, cb) => {
-    const path = '/uploads/images';
-    if (!fs.existsSync(path)) {
-      fs.mkdirSync(path, { recursive: true });
+    const uploadPath = path.join(__dirname, 'uploads', 'images');
+    if (!fs.existsSync(uploadPath)) {
+      fs.mkdirSync(uploadPath, { recursive: true });
     }
-    cb(null, path);
+    cb(null, uploadPath);
   },
   filename: (_, file, cb) => {
     cb(null, file.originalname);
@@ -67,11 +67,12 @@ const imageStorage = multer.diskStorage({
 
 const fileStorage = multer.diskStorage({
   destination: (_, __, cb) => {
-    const path = '/uploads/files';
-    if (!fs.existsSync(path)) {
-      fs.mkdirSync(path, { recursive: true });
+    // Change from absolute path to relative path
+    const uploadPath = path.join(__dirname, 'uploads', 'files');
+    if (!fs.existsSync(uploadPath)) {
+      fs.mkdirSync(uploadPath, { recursive: true });
     }
-    cb(null, path);
+    cb(null, uploadPath);
   },
   filename: (_, file, cb) => {
     // Ensure the filename is properly encoded
@@ -81,7 +82,6 @@ const fileStorage = multer.diskStorage({
     cb(null, safeName);
   },
 });
-
 
 const uploadImage = multer({ storage: imageStorage });
 const uploadFile = multer({ storage: fileStorage });
