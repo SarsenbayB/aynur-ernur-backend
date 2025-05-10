@@ -54,7 +54,7 @@ const app = express();
 
 const imageStorage = multer.diskStorage({
   destination: (_, __, cb) => {
-    const path = 'uploads/images';
+    const path = '/api/uploads/images';
     if (!fs.existsSync(path)) {
       fs.mkdirSync(path, { recursive: true });
     }
@@ -67,7 +67,7 @@ const imageStorage = multer.diskStorage({
 
 const fileStorage = multer.diskStorage({
   destination: (_, __, cb) => {
-    const path = 'uploads/files';
+    const path = '/api/uploads/files';
     if (!fs.existsSync(path)) {
       fs.mkdirSync(path, { recursive: true });
     }
@@ -100,13 +100,13 @@ app.post('/auth/reset-password/:token', UserController.resetPassword);
 app.get('/auth/me', checkAuth, UserController.getMe);
 
 app.post('/api/upload/image', uploadImage.single('image'), (req, res) => {
-  res.json({ url: `api/uploads/images/${req.file.originalname}` });
+  res.json({ url: `/api/uploads/images/${req.file.originalname}` });
 });
 
 app.post('/api/upload/file', uploadFile.single('file'), (req, res) => {
   const fileName = encodeURIComponent(req.file.filename);
   res.json({
-    url: `api/uploads/files/${fileName}`,
+    url: `/api/uploads/files/${fileName}`,
     originalName: req.file.filename
   });
 });
