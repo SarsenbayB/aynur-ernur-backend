@@ -131,7 +131,7 @@ const __dirname = path.dirname(__filename);
 export const download = async (req, res) => {
     try {
         const filename = decodeURIComponent(req.params.filename);
-        const filePath = path.join(__dirname, '../uploads/files', filename);
+        const filePath = path.join(__dirname, '../api/uploads/files', filename);
 
         // Set download headers
         res.setHeader('Content-Disposition', `attachment; filename*=UTF-8''${encodeURIComponent(filename)}`);
