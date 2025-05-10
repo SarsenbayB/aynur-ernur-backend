@@ -15,5 +15,9 @@ COPY . .
 # Expose порт, указанный в .env
 EXPOSE 9999
 
+# Создаем директории для загрузки файлов
+RUN mkdir -p /app/uploads/files
+RUN mkdir -p /app/uploads/images
+
 # Запускаем приложение
 CMD ["npm", "start"]

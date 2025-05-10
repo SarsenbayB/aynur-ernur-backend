@@ -31,6 +31,8 @@ services:
       - EMAIL_PASS=${EMAIL_PASS}
       - FRONTEND_URL=${FRONTEND_URL}
       - MONGO_URI=mongodb://${DB_USER}:${DB_PASSWORD}@mongodb/${DB_NAME}?retryWrites=true&w=majority`
+    volumes:
+      - uploads_data:/app/uploads
     networks:
       - backend
     # Сервис React-Vite
@@ -46,3 +48,5 @@ services:
       - backend
 networks:
   backend:
+volumes:
+  uploads_data:

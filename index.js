@@ -24,6 +24,18 @@ const PORT = process.env.PORT || 9999;
 const DB_USER = process.env.DB_USER;
 const DB_PASSWORD = process.env.DB_PASSWORD;
 const DB_NAME = process.env.DB_NAME;
+const UPLOAD_DIR = path.join(__dirname, 'uploads');
+
+
+if (!fs.existsSync(UPLOAD_DIR)) {
+  fs.mkdirSync(UPLOAD_DIR, { recursive: true });
+}
+if (!fs.existsSync(path.join(UPLOAD_DIR, 'files'))) {
+  fs.mkdirSync(path.join(UPLOAD_DIR, 'files'), { recursive: true });
+}
+if (!fs.existsSync(path.join(UPLOAD_DIR, 'images'))) {
+  fs.mkdirSync(path.join(UPLOAD_DIR, 'images'), { recursive: true });
+}
 
 const dropTextIndex = async () => {
   try {
@@ -54,11 +66,7 @@ const app = express();
 
 const imageStorage = multer.diskStorage({
   destination: (_, __, cb) => {
-    const path = '/api/uploads/images';
-    if (!fs.existsSync(path)) {
-      fs.mkdirSync(path, { recursive: true });
-    }
-    cb(null, path);
+    cb(null, path.join(UPLOAD_DIR, 'images'));
   },
   filename: (_, file, cb) => {
     cb(null, file.originalname);
@@ -67,11 +75,7 @@ const imageStorage = multer.diskStorage({
 
 const fileStorage = multer.diskStorage({
   destination: (_, __, cb) => {
-    const path = '/api/uploads/files';
-    if (!fs.existsSync(path)) {
-      fs.mkdirSync(path, { recursive: true });
-    }
-    cb(null, path);
+    cb(null, path.join(UPLOAD_DIR, 'files'));
   },
   filename: (_, file, cb) => {
     // Ensure the filename is properly encoded
@@ -89,7 +93,7 @@ const uploadFile = multer({ storage: fileStorage });
 
 app.use(express.json());
 app.use(cors());
-app.use('/api/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/api/uploads', express.static(UPLOAD_DIR));
 
 
 app.post('/auth/login', loginValidation, handleValidationErrors, UserController.login);
