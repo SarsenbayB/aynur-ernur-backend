@@ -44,6 +44,8 @@ services:
     restart: always
     ports:
       - "80:80"
+    volumes:
+      - ./uploads:/usr/share/nginx/html/uploads
     networks:
       - backend
 networks:
