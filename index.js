@@ -24,18 +24,6 @@ const PORT = process.env.PORT || 9999;
 const DB_USER = process.env.DB_USER;
 const DB_PASSWORD = process.env.DB_PASSWORD;
 const DB_NAME = process.env.DB_NAME;
-const UPLOAD_DIR = path.join(__dirname, 'uploads');
-
-
-if (!fs.existsSync(UPLOAD_DIR)) {
-  fs.mkdirSync(UPLOAD_DIR, { recursive: true });
-}
-if (!fs.existsSync(path.join(UPLOAD_DIR, 'files'))) {
-  fs.mkdirSync(path.join(UPLOAD_DIR, 'files'), { recursive: true });
-}
-if (!fs.existsSync(path.join(UPLOAD_DIR, 'images'))) {
-  fs.mkdirSync(path.join(UPLOAD_DIR, 'images'), { recursive: true });
-}
 
 const dropTextIndex = async () => {
   try {
@@ -66,7 +54,11 @@ const app = express();
 
 const imageStorage = multer.diskStorage({
   destination: (_, __, cb) => {
-    cb(null, path.join(UPLOAD_DIR, 'images'));
+    const path = '/uploads/images';
+    if (!fs.existsSync(path)) {
+      fs.mkdirSync(path, { recursive: true });
+    }
+    cb(null, path);
   },
   filename: (_, file, cb) => {
     cb(null, file.originalname);
@@ -75,7 +67,11 @@ const imageStorage = multer.diskStorage({
 
 const fileStorage = multer.diskStorage({
   destination: (_, __, cb) => {
-    cb(null, path.join(UPLOAD_DIR, 'files'));
+    const path = '/uploads/files';
+    if (!fs.existsSync(path)) {
+      fs.mkdirSync(path, { recursive: true });
+    }
+    cb(null, path);
   },
   filename: (_, file, cb) => {
     // Ensure the filename is properly encoded
@@ -93,7 +89,7 @@ const uploadFile = multer({ storage: fileStorage });
 
 app.use(express.json());
 app.use(cors());
-app.use('/api/uploads', express.static(UPLOAD_DIR));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 
 app.post('/auth/login', loginValidation, handleValidationErrors, UserController.login);
@@ -110,7 +106,7 @@ app.post('/api/upload/image', uploadImage.single('image'), (req, res) => {
 app.post('/api/upload/file', uploadFile.single('file'), (req, res) => {
   const fileName = encodeURIComponent(req.file.filename);
   res.json({
-    url: `/api/uploads/files/${fileName}`,
+    url: `/uploads/files/${fileName}`,
     originalName: req.file.filename
   });
 });
